@@ -223,7 +223,7 @@ function App() {
     };
 
     return (
-        <>
+        <> 
             <Box
                 sx={{
                     height: 'calc(100vh)',
@@ -251,11 +251,7 @@ function App() {
                             color: dsMinutes <= 0 && dsSeconds <= 10
                             ? 'red'
                             : 'white',
-                            
                             bgcolor: 'black',
-                            // borderStyle : 'solid',
-                            // borderColor: 'black',
-                            // borderWidth : '5px',
                             userSelect: 'none',
                         }}
                     >
@@ -274,7 +270,7 @@ function App() {
                     >
                         {isHubActive ? 'Active' : 'Inactive'} Time: {timeLeftInShift}s
                     </Item>
-                    <Timeline autoWin={autonWin} matchTime={isTeleop ? timeElapsedInPeriod : 0} areRed={isRed} />
+                    <Timeline autoWin={autonWin} matchTime={isTeleop ? timeElapsedInPeriod : 0} areRed={isRed} Style={Item}/>
                     <Item
                         sx={{
                             fontSize: '40px',
@@ -283,7 +279,7 @@ function App() {
                             color: 'white',
                             bgcolor: 'black',
                             marginTop: '30px',
-                            width: '40%'
+                            width: '50%'
                         }}
                     >
                         Match Info <br/>
