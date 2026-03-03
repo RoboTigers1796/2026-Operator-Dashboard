@@ -27,15 +27,30 @@ function App() {
         return [storedValue, setStoredValue];
     }
 
-    function getRemainingTime(secondsRemainingInPeriod, isTeleop) {
+    function getRemainingTime(secondsRemainingInPeriod, isTeleop, isRed, autoWin) {
         console.log(secondsRemainingInPeriod);
-
+        
         if (!isTeleop) return secondsRemainingInPeriod;
 
-        const teleopTime = 140 - secondsRemainingInPeriod;
+        let teleopTime = 140 - secondsRemainingInPeriod;
+        let autoWon = false;
+        if (isRed) {
+            autoWon = autoWin === 'R';
+        } else {
+            autoWon = autoWin === 'B';
+        }
+        
         if (teleopTime <= 10) {
+            if (!autoWon) { // if we lost auto then we are active for the first 35 seconds of teleop
+                return 35 - teleopTime;
+            }
             return 10 - teleopTime;
         } else if (teleopTime <= 110) {
+            if (autoWon) {  // if we won auto then we are active for the last 55 seconds of teleop
+                if (getPhase(teleopTime - 10) === 3) {
+                    return 55 - ((teleopTime - 10) % 25 || 25)
+                }
+            }
             return 25 - ((teleopTime - 10) % 25 || 25)
         } else {
             return secondsRemainingInPeriod;
@@ -93,6 +108,10 @@ function App() {
         };
     }, []);
 
+    function roundToTenth(number) {
+        return Math.round(number * 10) / 10;
+    }
+
     function roundToHundredth(number) {
         return Math.round(number * 100) / 100;
     }
@@ -121,7 +140,7 @@ function App() {
                 );
                 setDsMinutes(calculatedMinutes);
                 setDsSeconds(calculatedSeconds);
-                const timeLeftInShift = res.ds_time === -1 ? 0 : roundToHundredth(getRemainingTime(time, isTeleop));
+                const timeLeftInShift = res.ds_time === -1 ? 0 : roundToTenth(getRemainingTime(time, isTeleop, res.is_red_alliance, res.auto_win));
                 setTimeLeftInShift(timeLeftInShift);
                 setIsCritical(timeLeftInShift <= 5);
                 setIsFieldConnected(res.is_connected);
@@ -268,7 +287,7 @@ function App() {
                             backgroundColor: isCritical ? Math.floor(timeLeftInShift * 5) % 2 === 0 ? 'yellow' : 'transparent' : isHubActive ? "green" : "crimson",
                         }}
                     >
-                        {isHubActive ? 'Active' : 'Inactive'} Time: {timeLeftInShift}s
+                        {isHubActive ? 'Active' : 'Inactive'} Time: {timeLeftInShift.toFixed(1)}s
                     </Item>
                     <Timeline autoWin={autonWin} matchTime={isTeleop ? timeElapsedInPeriod : 0} areRed={isRed} Style={Item}/>
                     <Item
