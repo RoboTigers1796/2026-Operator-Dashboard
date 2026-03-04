@@ -147,7 +147,7 @@ function App() {
                 setAutonWin(res.auto_win);
                 setIsRed(res.is_red_alliance);
                 setIsHubActive(getHubActive(time, res.is_red_alliance, res.auto_win, isTeleop));
-                setRedWin(res.autoWin === 'R');
+                setRedWin(res.auto_win === 'R');
                 setCurrentPhase(getCurrentPhase(time, isTeleop));
 
                 if (res.ds_time <= 0) {
@@ -303,7 +303,7 @@ function App() {
                     >
                         Match Info <br/>
                         Current phase: {currentPhase} <br/>
-                        Auto winner: {isTeleop ? redWin ? isRed ? "You WON Auto!" : "You LOST Auto!" : isRed ? "You LOST Auto!" : "You WON Auto!" : "Auto period"}
+                        Auto winner: {isTeleop ? (redWin ? (isRed ? 'You WON Auto!' : 'You LOST Auto!') : (isRed ? 'You LOST Auto!' : 'You WON Auto!')) : 'Auto period'}
                     </Item>
                 </Box>
                 <Box
