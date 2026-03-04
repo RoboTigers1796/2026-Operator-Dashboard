@@ -29,7 +29,7 @@ function App() {
 
     function getRemainingTime(secondsRemainingInPeriod, isTeleop, isRed, autoWin) {
         console.log(secondsRemainingInPeriod);
-        
+
         if (!isTeleop) return secondsRemainingInPeriod;
 
         let teleopTime = 140 - secondsRemainingInPeriod;
@@ -39,7 +39,7 @@ function App() {
         } else {
             autoWon = autoWin === 'B';
         }
-        
+
         if (teleopTime <= 10) {
             if (!autoWon) { // if we lost auto then we are active for the first 35 seconds of teleop
                 return 35 - teleopTime;
@@ -65,14 +65,14 @@ function App() {
         return phase % 2 === 1;
     }
 
-    function getCurrentPhase(secondsRemainingInPeriod,isTeleop){
-        if(!isTeleop) return "Auto";
+    function getCurrentPhase(secondsRemainingInPeriod, isTeleop) {
+        if (!isTeleop) return "Auto";
 
         const teleopTime = 140 - secondsRemainingInPeriod
-        if(teleopTime <= 10){
+        if (teleopTime <= 10) {
             return "Transition Phase";
-        } else if (teleopTime <= 110){
-            return getPhase(teleopTime - 10)+1;
+        } else if (teleopTime <= 110) {
+            return getPhase(teleopTime - 10) + 1;
         } else {
             return "End Game";
         }
@@ -242,7 +242,7 @@ function App() {
     };
 
     return (
-        <> 
+        <>
             <Box
                 sx={{
                     height: 'calc(100vh)',
@@ -268,8 +268,8 @@ function App() {
                             fontSize: '30px',
                             padding: '12px 22px',
                             color: dsMinutes <= 0 && dsSeconds <= 10
-                            ? 'red'
-                            : 'white',
+                                ? 'red'
+                                : 'white',
                             bgcolor: 'black',
                             userSelect: 'none',
                         }}
@@ -279,7 +279,7 @@ function App() {
                     <Item
                         sx={{
                             fontSize: '50px',
-                            WebkitTextStroke : isCritical ? Math.floor(timeLeftInShift * 5) % 2 === 0 ? '0%' : '20%' : '20%',
+                            WebkitTextStroke: isCritical ? Math.floor(timeLeftInShift * 5) % 2 === 0 ? '0%' : '20%' : '20%',
                             padding: '12px 22px',
                             userSelect: 'none',
                             width: '40%',
@@ -289,22 +289,71 @@ function App() {
                     >
                         {isHubActive ? 'Active' : 'Inactive'} Time: {timeLeftInShift.toFixed(1)}s
                     </Item>
-                    <Timeline autoWin={autonWin} matchTime={isTeleop ? timeElapsedInPeriod : 0} areRed={isRed} Style={Item}/>
-                    <Item
+                    <Timeline autoWin={autonWin} matchTime={isTeleop ? timeElapsedInPeriod : 0} areRed={isRed} Style={Item} />
+                    <Box
                         sx={{
-                            fontSize: '40px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 2,
                             padding: '12px 22px',
-                            userSelect: 'none',
-                            color: 'white',
                             bgcolor: 'black',
                             marginTop: '30px',
-                            width: '50%'
+                            width: '50%',
                         }}
                     >
-                        Match Info <br/>
-                        Current phase: {currentPhase} <br/>
-                        Auto winner: {isTeleop ? (redWin ? (isRed ? 'You WON Auto!' : 'You LOST Auto!') : (isRed ? 'You LOST Auto!' : 'You WON Auto!')) : 'Auto period'}
-                    </Item>
+                        <Item
+                            sx={{
+                                fontSize: '40px',
+                                color: 'white',
+                                userSelect: 'none',
+                                bgcolor: 'black',
+                            }}
+                        >
+                            Match Info
+                        </Item>
+
+                        <Item
+                            sx={{
+                                fontSize: '40px',
+                                color: 'white',
+                                userSelect: 'none',
+                                bgcolor: 'black',
+                            }}
+                        >
+                            Current phase: {currentPhase}
+                        </Item>
+
+                        <Item sx={{ fontSize: '40px', color: 'white', userSelect: 'none', bgcolor: 'black' }}>
+                            Auto winner:{' '}
+                            {isTeleop ? (
+                                <>
+                                    You{' '}
+                                    <span
+                                        style={{
+                                            color: redWin
+                                                ? isRed
+                                                    ? 'green'
+                                                    : 'red'
+                                                : isRed
+                                                    ? 'red'
+                                                    : 'green',
+                                        }}
+                                    >
+                                        {redWin
+                                            ? isRed
+                                                ? 'WON'
+                                                : 'LOST'
+                                            : isRed
+                                                ? 'LOST'
+                                                : 'WON'}
+                                    </span>{' '}
+                                    Auto
+                                </>
+                            ) : (
+                                'Auto period'
+                            )}
+                        </Item>
+                    </Box>
                 </Box>
                 <Box
                     sx={{
