@@ -251,7 +251,7 @@ function App() {
                     flexDirection: 'column',
                     margin: '0 auto',
                     paddingTop: '20px',
-                    bgcolor: isCritical ? Math.floor(timeLeftInShift * 5) % 2 === 0 ? 'yellow' : 'transparent' : isHubActive ? "green" : "crimson",
+                    bgcolor: isCritical ? Math.floor(timeLeftInShift * 5) % 2 === 0 ? '#FBEC5D' : 'transparent' : isHubActive ? "#54AB47" : "crimson",
                 }}
             >
                 <Box
@@ -272,6 +272,7 @@ function App() {
                                 : 'white',
                             bgcolor: 'black',
                             userSelect: 'none',
+                            borderRadius: '12px'
                         }}
                     >
                         Match Time: {dsMinutes}m {dsSeconds}s
@@ -284,7 +285,7 @@ function App() {
                             userSelect: 'none',
                             width: '40%',
                             color: isCritical ? 'black' : 'white',
-                            backgroundColor: isCritical ? Math.floor(timeLeftInShift * 5) % 2 === 0 ? 'yellow' : 'transparent' : isHubActive ? "green" : "crimson",
+                            backgroundColor: isCritical ? Math.floor(timeLeftInShift * 5) % 2 === 0 ? '#FBEC5D' : 'transparent' : isHubActive ? "#54AB47" : "crimson",
                         }}
                     >
                         {isHubActive ? 'Active' : 'Inactive'} Time: {timeLeftInShift.toFixed(1)}s
@@ -296,9 +297,10 @@ function App() {
                             flexDirection: 'column',
                             gap: 2,
                             padding: '12px 22px',
-                            bgcolor: 'black',
+                            bgcolor: '#181716',
                             marginTop: '30px',
                             width: '50%',
+                            borderRadius: '15px'
                         }}
                     >
                         <Item
@@ -306,7 +308,8 @@ function App() {
                                 fontSize: '40px',
                                 color: 'white',
                                 userSelect: 'none',
-                                bgcolor: 'black',
+                                bgcolor: '#2a2727',
+                                borderRadius: '15px'
                             }}
                         >
                             Match Info
@@ -317,13 +320,13 @@ function App() {
                                 fontSize: '40px',
                                 color: 'white',
                                 userSelect: 'none',
-                                bgcolor: 'black',
+                                bgcolor: '#181716',
                             }}
                         >
                             Current phase: {currentPhase}
                         </Item>
 
-                        <Item sx={{ fontSize: '40px', color: 'white', userSelect: 'none', bgcolor: 'black' }}>
+                        <Item sx={{ fontSize: '40px', color: 'white', userSelect: 'none', bgcolor: '#181716' }}>
                             Auto winner:{' '}
                             {isTeleop ? (
                                 <>
