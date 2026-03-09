@@ -3,6 +3,7 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+import confetti from 'canvas-confetti';
 
 import { Box } from '@mui/material';
 import './App.css';
@@ -10,6 +11,7 @@ import { SimpleDialog } from './components/SimpleDialogue';
 import Timeline from './components/Timeline';
 
 function App() {
+
     function useLocalStorage(key, initialValue) {
         const [storedValue, setStoredValue] = useState(() => {
             try {
@@ -25,6 +27,14 @@ function App() {
         }, [key, storedValue]);
 
         return [storedValue, setStoredValue];
+    }
+
+    function getAutoWinner(){
+        if (isRed) {
+            return autonWin === 'R';
+        } else {
+            return autonWin === 'B';
+        }
     }
 
     function getRemainingTime(secondsRemainingInPeriod, isTeleop, isRed, autoWin) {
@@ -115,6 +125,7 @@ function App() {
     function roundToHundredth(number) {
         return Math.round(number * 100) / 100;
     }
+    
 
     function getDataFromServer(isTeleop) {
         axios({
@@ -149,6 +160,7 @@ function App() {
                 setIsHubActive(getHubActive(time, res.is_red_alliance, res.auto_win, isTeleop));
                 setRedWin(res.auto_win === 'R');
                 setCurrentPhase(getCurrentPhase(time, isTeleop));
+                setAutoWon(getAutoWinner())
 
                 if (res.ds_time <= 0) {
                     setIsTeleop(false)
@@ -191,11 +203,12 @@ function App() {
     const [timeLeftInShift, setTimeLeftInShift] = useLocalStorage('timeLeftInShift', 0);
     const [currentPhase, setCurrentPhase] = useLocalStorage('currentPhase', "Transition Period")
     const [redWin, setRedWin] = useLocalStorage('redWin', false)
-    const [autonWin, setAutonWin] = useLocalStorage('autoWinner', "Not determined");
+    const [autonWin, setAutonWin] = useLocalStorage('getAutoWinner', "Not determined");
     const [isTeleop, setIsTeleop] = useLocalStorage('isTeleop', false);
     const [isRed, setIsRed] = useLocalStorage('isRed', false);
     const [isHubActive, setIsHubActive] = useLocalStorage('isHubActive', false)
     const [isCritical, setIsCritical] = useLocalStorage('isCritical', false);
+    const [autoWon, setAutoWon] = useLocalStorage('autoWon', false)
 
     const [isFieldConnected, setIsFieldConnected] = useLocalStorage(
         'isConnected',
@@ -241,6 +254,15 @@ function App() {
         setIsTeleop(false);
     };
 
+    useEffect(() => {
+        if (autoWon) {
+          confetti({
+            particleCount: 750,
+            spread: 120
+          });
+        }
+      }, [autoWon]);
+
     return (
         <>
             <Box
@@ -270,7 +292,7 @@ function App() {
                             color: dsMinutes <= 0 && dsSeconds <= 10
                                 ? 'red'
                                 : 'white',
-                            bgcolor: 'black',
+                            bgcolor: '#181716',
                             userSelect: 'none',
                             borderRadius: '12px'
                         }}
